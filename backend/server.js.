@@ -1,0 +1,85 @@
+CREATE DATABASE IF NOT EXISTS volunteer_db;
+USE volunteer_db;
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id         BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email           VARCHAR(255) NOT NULL UNIQUE,
+    password_hash   VARCHAR(255) NOT NULL,
+    role            VARCHAR(30)  NOT NULL,
+    is_active       BOOLEAN      NOT NULL DEFAULT TRUE,
+    created_at      DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT chk_users_role CHECK (role IN ('VOLUNTEER', 'ORG_ADMIN', 'SYSTEM_ADMIN'))
+);
+
+CREATE TABLE IF NOT EXISTS volunteer_profile (
+    volunteer_id          BIGINT PRIMARY KEY,
+    first_name            VARCHAR(100) NOT NULL,
+    last_name             VARCHAR(100) NOT NULL,
+    phone                 VARCHAR(30),
+    location              VARCHAR(150),
+    availability_summary  VARCHAR(255),
+    CONSTRAINT fk_volunteer_profile_user FOREIGN KEY (volunteer_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS organisation (
+    organisation_id     BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name                 VARCHAR(200) NOT NULL,
+    email                VARCHAR(255),
+    phone                VARCHAR(30),
+    address              VARCHAR(255),
+    verification_status  VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+    CONSTRAINT chk_org_verification CHECK (verification_status IN ('PENDING', 'VERIFIED', 'REJECTED'))
+);
+
+CREATE TABLE IF NOT EXISTS organisation_member (
+    user_id          BIGINT NOT NULL,
+    organisation_id  BIGINT NOT NULL,
+    member_role      VARCHAR(30) NOT NULL DEFAULT 'ADMIN',
+    PRIMARY KEY (user_id, organisation_id),
+    CONSTRAINT fk_member_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    CONSTRAINT fk_member_org  FOREIGN KEY (organisation_id) REFERENCES organisation(organisation_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS opportunity (
+    opportunity_id       BIGINT AUTO_INCREMENT PRIMARY KEY,
+    organisation_id      BIGINT NOT NULL,
+    title                VARCHAR(200) NOT NULL,
+    description          TEXT NOT NULL,
+    location             VARCHAR(200) NOT NULL,
+    start_datetime       DATETIME NOT NULL,
+    end_datetime         DATETIME,
+    required_volunteers  INT NOT NULL,
+    status               VARCHAR(30) NOT NULL DEFAULT 'OPEN',
+    CONSTRAINT fk_opportunity_org FOREIGN KEY (organisation_id) REFERENCES organisation(organisation_id) ON DELETE CASCADE,
+    CONSTRAINT chk_opportunity_required CHECK (required_volunteers >= 0),
+    CONSTRAINT chk_opportunity_status CHECK (status IN ('OPEN', 'CLOSED', 'CANCELLED', 'COMPLETED'))
+);
+
+CREATE TABLE IF NOT EXISTS application (
+    application_id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    volunteer_id     BIGINT NOT NULL,
+    opportunity_id   BIGINT NOT NULL,
+    status           VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+    applied_at       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    decision_at      DATETIME,
+    CONSTRAINT fk_application_volunteer FOREIGN KEY (volunteer_id) REFERENCES volunteer_profile(volunteer_id) ON DELETE CASCADE,
+    CONSTRAINT fk_application_opportunity FOREIGN KEY (opportunity_id) REFERENCES opportunity(opportunity_id) ON DELETE CASCADE,
+    CONSTRAINT uq_application_volunteer_opportunity UNIQUE (volunteer_id, opportunity_id),
+    CONSTRAINT chk_application_status CHECK (status IN ('PENDING', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'))
+);
+
+CREATE TABLE IF NOT EXISTS notification (
+    notification_id   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id            BIGINT NOT NULL,
+    notification_type  VARCHAR(50) NOT NULL,
+    message            VARCHAR(1000) NOT NULL,
+    is_read            BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at         DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_opportunity_status ON opportunity(status);
+CREATE INDEX idx_opportunity_org ON opportunity(organisation_id);
+CREATE INDEX idx_application_opportunity ON application(opportunity_id);
+CREATE INDEX idx_application_volunteer ON application(volunteer_id);
+CREATE INDEX idx_notification_user ON notification(user_id);
