@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Register</title><link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth">
+        <div class="auth-card">
+            <h1>Create Account</h1>
+            <p>Register as a volunteer or organisation admin.</p>
+            <form onsubmit="event.preventDefault();alert('Frontend demo: account created.');location.href='index.html'">
+            <div class="field">
+                <label>Full Name</label>
+                <input required>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" required>
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" required>
+            </div>
+            <div class="field">
+                <label>Role</label>
+                <select>
+                    <option>Volunteer</option>
+                    <option>Organisation Admin</option>
+                </select>
+            </div>
+            <div class="actions">
+                <button class="btn" type="submit">Create Account</button>
+            </div>
+        </form>
+        <div class="auth-links">
+            <a href="index.html">Back to Login</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Applicants - Volunteer System</title><link rel="stylesheet" href="css/style.css">
+    </head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+        <div class="brand">Volunteer System</div>
+<nav class="nav">
+    <a href="admin-dashboard.html" class="">Dashboard</a>
+    <a href="admin-opportunities.html" class="">Manage Opportunities</a>
+    <a href="post-opportunity.html" class="">Post Opportunity</a>
+    <a href="admin-applicants.html" class="active">Applicants</a>
+    <a href="admin-profile.html" class="">Profile</a>
+</nav>
+<a class="logout" href="index.html">Log Out</a>
+        </aside>
+<main class="main">
+    <div class="container">
+        <div class="page-head">
+            <div><h1>Applicants</h1><p>View volunteers who signed up for your opportunities.</p></div>
+        </div>
+<div class="table-wrap">
+    <table><thead><tr>
+        <th>Volunteer</th>
+        <th>Opportunity</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr></thead>
+<tbody>
+    <tr>
+        <td>Thando M.</td>
+        <td>Road Cleanup</td>
+        <td>20 Aug 2026</td>
+        <td><span class="badge success">Confirmed</span></td>
+        <td><button class="btn small secondary">View</button></td>
+    </tr>
+    <tr>
+        <td>Sam N.</td>
+        <td>Road Cleanup</td>
+        <td>20 Aug 2026</td>
+        <td><span class="badge">Pending</span></td>
+        <td><button class="btn small">Review</button></td>
+    </tr>
+    <tr>
+        <td>Ayanda K.</td>
+        <td>Community Garden</td>
+        <td>25 Aug 2026</td>
+        <td><span class="badge success">Confirmed</span></td>
+        <td><button class="btn small secondary">View</button></td>
+    </tr>
+</tbody>
+</table></div>
+</div>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

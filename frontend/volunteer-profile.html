@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Profile - Volunteer System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">Volunteer System</div>
+            <nav class="nav">
+                <a href="volunteer-dashboard.html" class="">Dashboard</a>
+                <a href="opportunities.html" class="">Opportunities</a>
+                <a href="my-opportunities.html" class="">My Opportunities</a>
+                <a href="volunteer-profile.html" class="active">Profile</a>
+            </nav><a class="logout" href="index.html">Log Out</a>
+        </aside>
+<main class="main">
+    <div class="container">
+        <div class="page-head">
+             <div>
+                <h1>My Profile</h1>
+                <p>Manage your volunteer information.</p>
+            </div>
+        </div>
+        <div class="card profile">
+            <div class="avatar">V</div>
+            <form id="profileForm">
+            <div class="grid grid-2">
+                <div class="field">
+                    <label>Full Name</label>
+                    <input value="Volunteer User">
+                </div>
+                <div class="field">
+                    <label>Email</label>
+                    <input value="volunteer@example.com" type="email">
+                </div>
+                <div class="field">
+                    <label>Phone</label>
+                    <input value="071 000 0000">
+                </div>
+                <div class="field">
+                    <label>Location</label>
+                    <input value="Vryheid">
+                </div>
+                <div class="field full">
+                    <label>Skills / Interests</label>
+                    <textarea>Community work, environment, education</textarea>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn" type="submit">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Dashboard - Volunteer System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">Volunteer System</div>
+            <nav class="nav">
+                <a href="volunteer-dashboard.html" class="active">Dashboard</a>
+                <a href="opportunities.html" class="">Opportunities</a>
+                <a href="my-opportunities.html" class="">My Opportunities</a>
+                <a href="volunteer-profile.html" class="">Profile</a>
+            </nav>
+            <a class="logout" href="index.html">Log Out</a>
+        </aside>
+<main class="main">,
+    <div class="container">
+        <div class="page-head">
+            <div>
+                <h1>Dashboard</h1>
+                <p>Welcome back, Volunteer.</p>
+            </div>
+            <a class="btn" href="opportunities.html">Find Opportunities</a>
+        </div>
+        <div class="stats">
+            <div class="stat">
+                <div class="label">Available Opportunities</div>
+                <div class="number">8</div>
+            </div>
+            <div class="stat">
+                <div class="label">My Sign-ups</div>
+                <div class="number">3</div>
+            </div>
+            <div class="stat">
+                <div class="label">Completed</div>
+                <div class="number">5</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>Upcoming Opportunities</h2>
+            <div id="dashboardList" class="list"></div>
+        </div>
+        <script>document.addEventListener('DOMContentLoaded',()=>renderOpportunities('dashboardList','Upcoming'))</script>
+    </div>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

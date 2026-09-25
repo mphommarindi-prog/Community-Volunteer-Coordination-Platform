@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Dashboard - Volunteer System</title>
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">Volunteer System</div>
+        <nav class="nav">
+            <a href="volunteer-dashboard.html" class="active">Dashboard</a>
+            <a href="opportunities.html" class="">Opportunities</a>
+            <a href="my-opportunities.html" class="">My Opportunities</a>
+            <a href="volunteer-profile.html" class="">Profile</a>
+        </nav>
+        <a class="logout" href="index.html">Log Out</a>
+    </aside>
+<main class="main"><div class="container">
+    <div class="page-head">
+        <div><h1>Organisation Dashboard</h1>
+            <p>Manage your volunteer opportunities and applicants.</p>
+        </div><a class="btn" href="post-opportunity.html">+ Post Opportunity</a>
+    </div>
+    <div class="stats">
+        <div class="stat">
+            <div class="label">Posted Opportunities</div>
+            <div class="number">3</div>
+        </div>
+        <div class="stat">
+            <div class="label">Active Opportunities</div>
+            <div class="number">1</div>
+        </div>
+        <div class="stat">
+            <div class="label">Total Applicants</div>
+            <div class="number">42</div>
+        </div>
+    </div>
+    <div class="card"><h2>Recent Opportunities</h2>
+        <div id="adminRecent" class="list"></div>
+    </div>
+    <script>document.addEventListener('DOMContentLoaded',()=>renderOpportunities('adminRecent'))</script>
+</div>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Profile - Volunteer System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">Volunteer System</div>
+        <nav class="nav">
+            <a href="admin-dashboard.html" class="">Dashboard</a>
+            <a href="admin-opportunities.html" class="">Manage Opportunities</a>
+            <a href="post-opportunity.html" class="">Post Opportunity</a>
+            <a href="admin-applicants.html" class="">Applicants</a>
+            <a href="admin-profile.html" class="active">Profile</a>
+        </nav>
+        <a class="logout" href="index.html">Log Out</a>
+        </aside>
+<main class="main">
+    <div class="container">
+        <div class="page-head">
+            <div>
+                <h1>Organisation Profile</h1>
+                <p>Manage your organisation information.</p>
+            </div>
+        </div>
+    <div class="card profile">
+        <div class="avatar">0</div>
+        <form id="profileForm">
+            <div class="grid grid-2">
+                <div class="field">
+                    <label>Organisation Name</label>
+                    <input value="Community Action Organisation">
+                </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" value="admin@organisation.org">
+            </div>
+            <div class="field">
+                <label>Phone</label>
+                <input value="031 000 0000">
+            </div>
+        <div class="field">
+            <label>Location</label>
+            <input value="KwaZulu-Natal">
+        </div>
+        <div class="field full">
+            <label>About Organisation</label>
+            <textarea>We coordinate local community volunteering opportunities.</textarea>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="btn" type="submit">Save Changes</button>
+    </div>
+</form>
+</div>
+</div>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

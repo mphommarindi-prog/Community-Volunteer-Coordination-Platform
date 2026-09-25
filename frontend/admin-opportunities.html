@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Manage Opportunities - Volunteer System</title>
+        <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app">
+        <aside class="sidebar">
+            <div class="brand">Volunteer System</div>
+    <nav class="nav"><a href="admin-dashboard.html" class="">Dashboard</a>\
+        <a href="admin-opportunities.html" class="active">Manage Opportunities</a>
+        <a href="post-opportunity.html" class="">Post Opportunity</a>
+        <a href="admin-applicants.html" class="">Applicants</a>
+        <a href="admin-profile.html" class="">Profile</a>
+    </nav>
+    <a class="logout" href="index.html">Log Out</a>
+        </aside>
+<main class="main">
+    <div class="container">
+        <div class="page-head">
+            <div><h1>My Opportunities</h1>
+                <p>View and manage opportunities posted by your organisation.</p>
+            </div>
+            <a class="btn" href="post-opportunity.html">+ Post Opportunity</a>
+        </div>
+        <div class="tabs" id="adminTabs">
+            <button class="tab active" data-filter="All">All</button>
+            <button class="tab" data-filter="Upcoming">Upcoming</button>
+            <button class="tab" data-filter="Completed">Completed</button>
+        </div>
+        <div id="adminList" class="list"></div>
+        <script>document.addEventListener('DOMContentLoaded',()=>{renderOpportunities('adminList');setTabs('adminTabs','adminList')})</script>
+    </div>
+</main>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
