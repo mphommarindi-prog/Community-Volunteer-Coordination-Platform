@@ -1,54 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Dashboard - Volunteer System</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Volunteer Dashboard
+</title>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+
 </head>
+
 <body>
-    <div class="app">
-        <aside class="sidebar">
-            <div class="brand">Volunteer System</div>
-            <nav class="nav">
-                <a href="volunteer-dashboard.html" class="active">Dashboard</a>
-                <a href="opportunities.html" class="">Opportunities</a>
-                <a href="my-opportunities.html" class="">My Opportunities</a>
-                <a href="volunteer-profile.html" class="">Profile</a>
-            </nav>
-            <a class="logout" href="index.html">Log Out</a>
-        </aside>
-<main class="main">,
-    <div class="container">
-        <div class="page-head">
-            <div>
-                <h1>Dashboard</h1>
-                <p>Welcome back, Volunteer.</p>
-            </div>
-            <a class="btn" href="opportunities.html">Find Opportunities</a>
-        </div>
-        <div class="stats">
-            <div class="stat">
-                <div class="label">Available Opportunities</div>
-                <div class="number">8</div>
-            </div>
-            <div class="stat">
-                <div class="label">My Sign-ups</div>
-                <div class="number">3</div>
-            </div>
-            <div class="stat">
-                <div class="label">Completed</div>
-                <div class="number">5</div>
-            </div>
-        </div>
-        <div class="card">
-            <h2>Upcoming Opportunities</h2>
-            <div id="dashboardList" class="list"></div>
-        </div>
-        <script>document.addEventListener('DOMContentLoaded',()=>renderOpportunities('dashboardList','Upcoming'))</script>
+
+<nav class="navbar">
+
+    <div class="logo">
+        Volunteer Dashboard
     </div>
-</main>
+
+    <div class="nav-links">
+
+        <a href="opportunities.html">
+            Opportunities
+        </a>
+
+        <a href="my-opportunities.html">
+            My Applications
+        </a>
+
+        <a
+            href="#"
+            onclick="logout()"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <h1>
+        Welcome Back
+    </h1>
+
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <h3>
+                Browse Opportunities
+            </h3>
+
+            <p>
+                Find new ways to support
+                your community.
+            </p>
+
+            <a
+                class="btn"
+                href="opportunities.html"
+            >
+                Browse
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                My Applications
+            </h3>
+
+            <p>
+                View the progress of your
+                submitted applications.
+            </p>
+
+            <a
+                class="btn"
+                href="my-opportunities.html"
+            >
+                View
+            </a>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                Volunteer Assistant
+            </h3>
+
+            <p>
+                Use the chatbot in the
+                bottom-right corner if
+                you need help.
+            </p>
+
+        </div>
+
+    </div>
+
 </div>
+
+
 <script src="app.js"></script>
+
 </body>
 </html>
