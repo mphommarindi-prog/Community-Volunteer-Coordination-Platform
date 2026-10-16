@@ -1,59 +1,1119 @@
+const API =
+    "http://localhost:5000/api";
 
-const opportunities = [
-  {id:1,title:"Road Cleanup",category:"Environment",location:"Newcastle",date:"20 Aug 2026",time:"09:00-14:00",spots:20,signed:14,status:"Upcoming",description:"Help clean public roads and surrounding community areas."},
-  {id:2,title:"Community Garden",category:"Community",location:"Vryheid",date:"25 Aug 2026",time:"08:00-12:00",spots:15,signed:8,status:"Upcoming",description:"Assist with planting, watering and maintaining a community garden."},
-  {id:3,title:"Food Donation Drive",category:"Charity",location:"Durban",date:"10 Aug 2026",time:"10:00-13:00",spots:12,signed:12,status:"Completed",description:"Help organise and distribute donated food to local families."}
-];
 
-function renderOpportunities(targetId, filter="All"){
-  const target=document.getElementById(targetId); if(!target)return;
-  let data=opportunities.filter(o=>filter==="All"||o.status===filter);
-  target.innerHTML=data.map(o=>`
-    <div class="item">
-      <div>
-        <h3>${o.title}</h3>
-        <p>${o.date} • ${o.time} • ${o.location}</p>
-        <p>${o.signed}/${o.spots} signed up • ${o.category}</p>
-      </div>
-      <div class="item-actions">
-        <span class="badge ${o.status==="Upcoming"?"success":""}">${o.status}</span>
-        <a class="btn small secondary" href="opportunity-details.html?id=${o.id}">View</a>
-      </div>
-    </div>`).join("") || '<div class="empty">No opportunities found.</div>';
+/* ======================================================
+   AUTHENTICATION HELPERS
+====================================================== */
+
+function getUser() {
+
+    const saved =
+        localStorage.getItem("currentUser");
+
+    return saved
+        ? JSON.parse(saved)
+        : null;
 }
-function setTabs(containerId, targetId){
-  const box=document.getElementById(containerId); if(!box)return;
-  box.querySelectorAll(".tab").forEach(tab=>{
-    tab.addEventListener("click",()=>{
-      box.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-      tab.classList.add("active");
-      renderOpportunities(targetId,tab.dataset.filter);
-    });
-  });
+
+
+function saveUser(user) {
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify(user)
+    );
 }
-function loadOpportunity(){
-  const params=new URLSearchParams(location.search), id=Number(params.get("id"))||1;
-  const o=opportunities.find(x=>x.id===id)||opportunities[0];
-  const el=document.getElementById("opportunityDetail"); if(!el)return;
-  el.innerHTML=`
-    <div class="hero"><h2>${o.title}</h2><p>${o.category} • ${o.location}</p></div>
-    <div class="grid grid-2">
-      <div class="card"><h3>Opportunity Details</h3>
-        <div class="info-row"><strong>Date</strong>${o.date}</div>
-        <div class="info-row"><strong>Time</strong>${o.time}</div>
-        <div class="info-row"><strong>Available spots</strong>${o.spots-o.signed} of ${o.spots}</div>
-        <div class="info-row"><strong>Status</strong>${o.status}</div>
-      </div>
-      <div class="card"><h3>Description</h3><p>${o.description}</p>
-        ${o.status==="Upcoming"?'<button class="btn" onclick="alert(\\'Frontend demo: registration submitted.\\')">Sign Up</button>':''}
-      </div>
-    </div>`;
+
+
+function logout() {
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    window.location.href =
+        "index.html";
 }
-document.addEventListener("DOMContentLoaded",()=>{
-  const signup=document.getElementById("signupForm");
-  if(signup) signup.addEventListener("submit",e=>{e.preventDefault();alert("Frontend demo: opportunity created.");location.href="admin-opportunities.html";});
-  const login=document.getElementById("loginForm");
-  if(login) login.addEventListener("submit",e=>{e.preventDefault();location.href=document.getElementById("role").value==="admin"?"admin-dashboard.html":"volunteer-dashboard.html";});
-  const profile=document.getElementById("profileForm");
-  if(profile) profile.addEventListener("submit",e=>{e.preventDefault();alert("Frontend demo: profile saved.");});
-});
+
+
+/* ======================================================
+   LOGIN
+====================================================== */
+
+async function login(event) {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("email").value;
+
+    const password =
+        document.getElementById("password").value;
+
+    try {
+
+        const response = await fetch(
+            `${API}/login`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+            showMessage(
+                result.error,
+                "error"
+            );
+
+            return;
+        }
+
+        saveUser(result.user);
+
+        if (
+            result.user.role ===
+            "organisation_admin"
+        ) {
+
+            window.location.href =
+                "admin-dashboard.html";
+
+        } else {
+
+            window.location.href =
+                "volunteer-dashboard.html";
+        }
+
+    } catch (error) {
+
+        showMessage(
+            "Could not connect to server.",
+            "error"
+        );
+    }
+}
+
+
+/* ======================================================
+   REGISTER
+====================================================== */
+
+function toggleRegistrationFields() {
+
+    const role =
+        document.getElementById(
+            "registerRole"
+        )?.value;
+
+    const volunteerFields =
+        document.getElementById(
+            "volunteerFields"
+        );
+
+    const organisationFields =
+        document.getElementById(
+            "organisationFields"
+        );
+
+    if (!volunteerFields) return;
+
+    volunteerFields.style.display =
+        role === "volunteer"
+            ? "grid"
+            : "none";
+
+    organisationFields.style.display =
+        role === "organisation_admin"
+            ? "block"
+            : "none";
+}
+
+
+async function registerUser(event) {
+
+    event.preventDefault();
+
+    const role =
+        document.getElementById(
+            "registerRole"
+        ).value;
+
+    const data = {
+        email:
+            document.getElementById(
+                "registerEmail"
+            ).value,
+
+        password:
+            document.getElementById(
+                "registerPassword"
+            ).value,
+
+        role,
+
+        first_name:
+            document.getElementById(
+                "firstName"
+            )?.value,
+
+        last_name:
+            document.getElementById(
+                "lastName"
+            )?.value,
+
+        phone:
+            document.getElementById(
+                "phone"
+            )?.value,
+
+        location:
+            document.getElementById(
+                "location"
+            )?.value,
+
+        organisation_name:
+            document.getElementById(
+                "organisationName"
+            )?.value
+    };
+
+    try {
+
+        const response = await fetch(
+            `${API}/register`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(data)
+            }
+        );
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+
+            showMessage(
+                result.error,
+                "error"
+            );
+
+            return;
+        }
+
+        showMessage(
+            "Account created successfully. You can now log in.",
+            "success"
+        );
+
+    } catch (error) {
+
+        showMessage(
+            "Server connection failed.",
+            "error"
+        );
+    }
+}
+
+
+/* ======================================================
+   OPPORTUNITIES
+====================================================== */
+
+async function loadOpportunities() {
+
+    const container =
+        document.getElementById(
+            "opportunityList"
+        );
+
+    if (!container) return;
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/opportunities`
+            );
+
+        const opportunities =
+            await response.json();
+
+        if (
+            opportunities.length === 0
+        ) {
+
+            container.innerHTML =
+                `<div class="empty">
+                    No opportunities available.
+                 </div>`;
+
+            return;
+        }
+
+        container.innerHTML =
+            opportunities.map(o => {
+
+                const date =
+                    new Date(
+                        o.start_datetime
+                    ).toLocaleDateString(
+                        "en-ZA"
+                    );
+
+                return `
+
+                <div class="item">
+
+                    <div>
+
+                        <h3>
+                            ${o.title}
+                        </h3>
+
+                        <p>
+                            ${o.organisation_name}
+                        </p>
+
+                        <p>
+                            ${o.location}
+                            •
+                            ${date}
+                        </p>
+
+                        <p>
+                            ${o.signed}
+                            /
+                            ${o.required_volunteers}
+                            volunteers registered
+                        </p>
+
+                    </div>
+
+                    <div class="item-actions">
+
+                        <span class="badge">
+                            ${o.status}
+                        </span>
+
+                        <a
+                            class="btn small"
+                            href="opportunity-details.html?id=${o.opportunity_id}"
+                        >
+                            View
+                        </a>
+
+                    </div>
+
+                </div>
+                `;
+
+            }).join("");
+
+    } catch (error) {
+
+        container.innerHTML =
+            `<div class="empty">
+                Unable to load opportunities.
+             </div>`;
+    }
+}
+
+
+/* ======================================================
+   OPPORTUNITY DETAILS
+====================================================== */
+
+async function loadOpportunityDetails() {
+
+    const container =
+        document.getElementById(
+            "opportunityDetail"
+        );
+
+    if (!container) return;
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        params.get("id");
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/opportunities/${id}`
+            );
+
+        const o =
+            await response.json();
+
+        const start =
+            new Date(o.start_datetime);
+
+        const end =
+            new Date(o.end_datetime);
+
+        container.innerHTML = `
+
+            <div class="grid grid-2">
+
+                <div class="card">
+
+                    <h2>
+                        ${o.title}
+                    </h2>
+
+                    <p>
+                        <strong>
+                            Organisation:
+                        </strong>
+                        ${o.organisation_name}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Location:
+                        </strong>
+                        ${o.location}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Date:
+                        </strong>
+
+                        ${start.toLocaleDateString("en-ZA")}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Time:
+                        </strong>
+
+                        ${start.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        })}
+
+                        -
+
+                        ${end.toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        })}
+                    </p>
+
+                    <p>
+                        <strong>
+                            Volunteers:
+                        </strong>
+
+                        ${o.signed}
+                        /
+                        ${o.required_volunteers}
+                    </p>
+
+                </div>
+
+                <div class="card">
+
+                    <h3>Description</h3>
+
+                    <p>
+                        ${o.description}
+                    </p>
+
+                    <button
+                        class="btn success"
+                        onclick="applyForOpportunity(${o.opportunity_id})"
+                    >
+                        Apply Now
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+    } catch (error) {
+
+        container.innerHTML =
+            `<div class="empty">
+                Opportunity could not be loaded.
+             </div>`;
+    }
+}
+
+
+/* ======================================================
+   APPLY
+====================================================== */
+
+async function applyForOpportunity(
+    opportunityId
+) {
+
+    const user =
+        getUser();
+
+    if (!user) {
+
+        alert(
+            "Please log in before applying."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+    if (
+        user.role !== "volunteer"
+    ) {
+
+        alert(
+            "Only volunteers can apply."
+        );
+
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/applications`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        volunteer_id:
+                            user.user_id,
+
+                        opportunity_id:
+                            opportunityId
+                    })
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+
+            alert(result.error);
+
+            return;
+        }
+
+        alert(
+            "Application submitted successfully."
+        );
+
+    } catch (error) {
+
+        alert(
+            "Application could not be submitted."
+        );
+    }
+}
+
+
+/* ======================================================
+   MY APPLICATIONS
+====================================================== */
+
+async function loadMyApplications() {
+
+    const container =
+        document.getElementById(
+            "myApplicationList"
+        );
+
+    if (!container) return;
+
+    const user =
+        getUser();
+
+    if (!user) return;
+
+    const response =
+        await fetch(
+            `${API}/my-applications/${user.user_id}`
+        );
+
+    const data =
+        await response.json();
+
+    container.innerHTML =
+        data.length
+        ? data.map(a => `
+
+            <div class="item">
+
+                <div>
+
+                    <h3>
+                        ${a.title}
+                    </h3>
+
+                    <p>
+                        ${a.location}
+                    </p>
+
+                    <p>
+                        Applied:
+                        ${new Date(
+                            a.applied_at
+                        ).toLocaleDateString("en-ZA")}
+                    </p>
+
+                </div>
+
+                <span
+                    class="badge ${a.status}"
+                >
+                    ${a.status}
+                </span>
+
+            </div>
+
+        `).join("")
+
+        :
+
+        `<div class="empty">
+            You have not applied
+            for any opportunities yet.
+         </div>`;
+}
+
+
+/* ======================================================
+   POST OPPORTUNITY
+====================================================== */
+
+async function createOpportunity(
+    event
+) {
+
+    event.preventDefault();
+
+    const user =
+        getUser();
+
+    if (
+        !user ||
+        !user.organisation_id
+    ) {
+
+        alert(
+            "Organisation account required."
+        );
+
+        return;
+    }
+
+    const data = {
+
+        organisation_id:
+            user.organisation_id,
+
+        title:
+            document.getElementById(
+                "title"
+            ).value,
+
+        description:
+            document.getElementById(
+                "description"
+            ).value,
+
+        location:
+            document.getElementById(
+                "opportunityLocation"
+            ).value,
+
+        start_datetime:
+            document.getElementById(
+                "startDate"
+            ).value,
+
+        end_datetime:
+            document.getElementById(
+                "endDate"
+            ).value,
+
+        required_volunteers:
+            Number(
+                document.getElementById(
+                    "requiredVolunteers"
+                ).value
+            )
+    };
+
+    const response =
+        await fetch(
+            `${API}/opportunities`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(data)
+            }
+        );
+
+    if (response.ok) {
+
+        alert(
+            "Opportunity created successfully."
+        );
+
+        window.location.href =
+            "admin-opportunities.html";
+
+    } else {
+
+        alert(
+            "Opportunity could not be created."
+        );
+    }
+}
+
+
+/* ======================================================
+   ADMIN APPLICANTS
+====================================================== */
+
+async function loadAdminApplicants() {
+
+    const container =
+        document.getElementById(
+            "applicantList"
+        );
+
+    if (!container) return;
+
+    const user =
+        getUser();
+
+    if (
+        !user ||
+        !user.organisation_id
+    ) {
+
+        container.innerHTML =
+            "Organisation account required.";
+
+        return;
+    }
+
+    const response =
+        await fetch(
+            `${API}/organisation/${user.organisation_id}/applications`
+        );
+
+    const applications =
+        await response.json();
+
+    container.innerHTML =
+        applications.length
+        ? applications.map(a => `
+
+            <div class="item">
+
+                <div>
+
+                    <h3>
+                        ${a.first_name}
+                        ${a.last_name}
+                    </h3>
+
+                    <p>
+                        ${a.opportunity_title}
+                    </p>
+
+                    <p>
+                        ${a.location || ""}
+                    </p>
+
+                    <span
+                        class="badge ${a.status}"
+                    >
+                        ${a.status}
+                    </span>
+
+                </div>
+
+                <div class="item-actions">
+
+                    <button
+                        class="btn small success"
+                        onclick="updateApplicationStatus(
+                            ${a.application_id},
+                            'accepted'
+                        )"
+                    >
+                        Accept
+                    </button>
+
+                    <button
+                        class="btn small danger"
+                        onclick="updateApplicationStatus(
+                            ${a.application_id},
+                            'rejected'
+                        )"
+                    >
+                        Reject
+                    </button>
+
+                </div>
+
+            </div>
+
+        `).join("")
+
+        :
+
+        `<div class="empty">
+            No applications found.
+         </div>`;
+}
+
+
+async function updateApplicationStatus(
+    id,
+    status
+) {
+
+    const response =
+        await fetch(
+            `${API}/applications/${id}/status`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify({
+                        status
+                    })
+            }
+        );
+
+    if (response.ok) {
+
+        alert(
+            `Application ${status}.`
+        );
+
+        loadAdminApplicants();
+
+    } else {
+
+        alert(
+            "Unable to update application."
+        );
+    }
+}
+
+
+/* ======================================================
+   ADMIN DASHBOARD
+====================================================== */
+
+async function loadAdminDashboard() {
+
+    const user =
+        getUser();
+
+    if (
+        !user ||
+        !user.organisation_id
+    ) return;
+
+    const response =
+        await fetch(
+            `${API}/admin/dashboard/${user.organisation_id}`
+        );
+
+    const data =
+        await response.json();
+
+    document.getElementById(
+        "totalOpportunities"
+    ).textContent =
+        data.opportunities;
+
+    document.getElementById(
+        "totalApplications"
+    ).textContent =
+        data.applications;
+
+    document.getElementById(
+        "totalAccepted"
+    ).textContent =
+        data.accepted;
+}
+
+
+/* ======================================================
+   CHATBOT
+====================================================== */
+
+function createChatbot() {
+
+    document.body.insertAdjacentHTML(
+        "beforeend",
+
+        `
+
+        <button
+            class="chatbot-button"
+            onclick="toggleChatbot()"
+            title="Chat with Volunteer Assistant"
+        >
+            💬
+        </button>
+
+        <div
+            class="chatbot-window"
+            id="chatbotWindow"
+        >
+
+            <div class="chatbot-header">
+                Volunteer Assistant
+            </div>
+
+            <div
+                class="chatbot-messages"
+                id="chatbotMessages"
+            >
+
+                <div
+                    class="chat-message bot"
+                >
+                    Hello! How can I help you
+                    with volunteering today?
+                </div>
+
+            </div>
+
+            <div class="chatbot-input">
+
+                <input
+                    id="chatbotInput"
+                    placeholder="Type your question..."
+                    onkeydown="
+                        if(event.key === 'Enter')
+                        sendChatMessage()
+                    "
+                >
+
+                <button
+                    onclick="sendChatMessage()"
+                >
+                    Send
+                </button>
+
+            </div>
+
+        </div>
+
+        `
+    );
+}
+
+
+function toggleChatbot() {
+
+    document
+        .getElementById(
+            "chatbotWindow"
+        )
+        .classList.toggle("open");
+}
+
+
+async function sendChatMessage() {
+
+    const input =
+        document.getElementById(
+            "chatbotInput"
+        );
+
+    const message =
+        input.value.trim();
+
+    if (!message) return;
+
+    const messageBox =
+        document.getElementById(
+            "chatbotMessages"
+        );
+
+    messageBox.insertAdjacentHTML(
+        "beforeend",
+
+        `
+        <div
+            class="chat-message user"
+        >
+            ${escapeHtml(message)}
+        </div>
+        `
+    );
+
+    input.value = "";
+
+    try {
+
+        const response =
+            await fetch(
+                `${API}/chatbot`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            message
+                        })
+                }
+            );
+
+        const result =
+            await response.json();
+
+        messageBox.insertAdjacentHTML(
+            "beforeend",
+
+            `
+            <div
+                class="chat-message bot"
+            >
+                ${escapeHtml(result.reply)}
+            </div>
+            `
+        );
+
+    } catch (error) {
+
+        messageBox.insertAdjacentHTML(
+            "beforeend",
+
+            `
+            <div
+                class="chat-message bot"
+            >
+                Sorry, the assistant
+                is temporarily unavailable.
+            </div>
+            `
+        );
+    }
+
+    messageBox.scrollTop =
+        messageBox.scrollHeight;
+}
+
+
+/* ======================================================
+   HELPERS
+====================================================== */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+}
+
+
+function showMessage(
+    text,
+    type
+) {
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+    if (!box) return;
+
+    box.textContent = text;
+
+    box.className =
+        `message ${type}`;
+}
+
+
+/* ======================================================
+   PAGE INITIALISATION
+====================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        createChatbot();
+
+        loadOpportunities();
+
+        loadOpportunityDetails();
+
+        loadMyApplications();
+
+        loadAdminApplicants();
+
+        loadAdminDashboard();
+
+        toggleRegistrationFields();
+    }
+);
