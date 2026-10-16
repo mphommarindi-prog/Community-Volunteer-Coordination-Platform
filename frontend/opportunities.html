@@ -1,41 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Opportunities - Volunteer System</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Volunteer Opportunities
+</title>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+
 </head>
+
 <body>
-    <div class="app">
-        <aside class="sidebar">
-            <div class="brand">Volunteer System</div>
-            <nav class="nav">
-                <a href="volunteer-dashboard.html" class="">Dashboard</a>
-                <a href="opportunities.html" class="active">Opportunities</a>
-                <a href="my-opportunities.html" class="active">My Opportunities</a>
-                <a href="volunteer-profile.html" class="">Profile</a>
-            </nav>
-            <a class="logout" href="index.html">Log Out</a>
-        </aside>
-<main class="main">
-    <div class="container">
-        <div class="page-head">
-            <div>
-                <h1>Opportunities</h1>
-                <p>Find community opportunities to volunteer for.</p>
-            </div>
-        </div>
-        <div class="tabs" id="opportunityTabs">
-            <button class="tab active" data-filter="All">All</button>
-            <button class="tab" data-filter="Upcoming">Upcoming</button>
-            <button class="tab" data-filter="Completed">Completed</button>
-        </div>
-        <div id="opportunityList" class="list"></div>
-        <script>document.addEventListener('DOMContentLoaded',()=>{renderOpportunities('opportunityList');setTabs('opportunityTabs','opportunityList')})</script>
+
+<nav class="navbar">
+
+    <div class="logo">
+        VolunteerConnect
     </div>
-</main>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="volunteer-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="my-opportunities.html">
+            My Applications
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <h1 class="page-title">
+        Volunteer Opportunities
+    </h1>
+
+    <p>
+        Explore available community
+        activities and choose where
+        you would like to contribute.
+    </p>
+
+    <div id="opportunityList">
+
+        Loading opportunities...
+
+    </div>
+
 </div>
+
+
 <script src="app.js"></script>
+
 </body>
 </html>
