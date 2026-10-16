@@ -1,41 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Volunteer System - Login</title>
-    <link rel="stylesheet" href="style.css">
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Community Volunteer Platform
+</title>
+
+<link
+    rel="stylesheet"
+    href="style.css"
+>
+
 </head>
+
 <body>
-    <div class="auth">
-        <div class="auth-card">
-            <h1>Volunteer System</h1>
-            <p>Community Volunteer Coordination Platform</p>
-            <form id="loginForm">
-                <div class="field">
-                    <label>Email</label>
-                    <input type="email" required placeholder="Enter your email">
-                </div>
-            <div class="field">
-                <label>Password</label>
-                <input type="password" required placeholder="Enter your password">
-            </div>
-            <div class="field">
-                <label>Login as</label>
-                <select id="role">
-                    <option value="volunteer">Volunteer</option>
-                    <option value="admin">Organisation Admin</option>
-                </select>
-            </div>
-            <div class="actions">
-                <button class="btn" type="submit">Log In</button>
-            </div>
-        </form>
-        <div class="auth-links">New user? <a href="register.html">
-            <b>Create an account</b></a>
-        </div>
+
+<nav class="navbar">
+
+    <div class="logo">
+        VolunteerConnect
     </div>
+
+    <div class="nav-links">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="opportunities.html">
+            Opportunities
+        </a>
+
+        <a href="register.html">
+            Register
+        </a>
+
+    </div>
+
+</nav>
+
+
+<section class="hero">
+
+    <h1>
+        Make a Difference
+        in Your Community
+    </h1>
+
+    <p>
+        Discover meaningful volunteer
+        opportunities, connect with local
+        organisations and contribute your
+        skills to projects that matter.
+    </p>
+
+    <div class="hero-buttons">
+
+        <a
+            class="btn success"
+            href="opportunities.html"
+        >
+            Find Opportunities
+        </a>
+
+        <a
+            class="btn secondary"
+            href="register.html"
+        >
+            Join the Platform
+        </a>
+
+    </div>
+
+</section>
+
+
+<div class="container">
+
+    <div class="grid grid-3">
+
+        <div class="card">
+
+            <h3>
+                Find Opportunities
+            </h3>
+
+            <p>
+                Browse volunteering activities
+                available in your community.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                Apply Online
+            </h3>
+
+            <p>
+                Submit applications directly
+                through the platform.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>
+                Track Participation
+            </h3>
+
+            <p>
+                Monitor your submitted
+                applications and status.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="card"
+        style="margin-top:30px"
+    >
+
+        <h2>
+            Login
+        </h2>
+
+        <div
+            id="message"
+            class="message"
+        ></div>
+
+        <form onsubmit="login(event)">
+
+            <div>
+
+                <label>
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    required
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    required
+                >
+
+            </div>
+
+
+            <button class="btn">
+                Login
+            </button>
+
+        </form>
+
+    </div>
+
 </div>
+
+
+<footer>
+    Community Volunteer Coordination Platform
+</footer>
+
+
 <script src="app.js"></script>
+
 </body>
 </html>
