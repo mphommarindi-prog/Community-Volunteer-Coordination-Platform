@@ -1,63 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Profile - Volunteer System</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Volunteer Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .profile-form { display: grid; gap: 16px; max-width: 620px; }
+    .profile-form label { display: grid; gap: 6px; font-weight: 600; }
+    .profile-form input, .profile-form textarea { width: 100%; box-sizing: border-box; padding: 11px; font: inherit; border: 1px solid #9ca3af; border-radius: 6px; }
+    .profile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    #profileMessage { min-height: 1.5em; }
+  </style>
 </head>
 <body>
-    <div class="app">
-        <aside class="sidebar">
-            <div class="brand">Volunteer System</div>
-            <nav class="nav">
-                <a href="volunteer-dashboard.html" class="">Dashboard</a>
-                <a href="opportunities.html" class="">Opportunities</a>
-                <a href="my-opportunities.html" class="">My Opportunities</a>
-                <a href="volunteer-profile.html" class="active">Profile</a>
-            </nav><a class="logout" href="index.html">Log Out</a>
-        </aside>
-<main class="main">
-    <div class="container">
-        <div class="page-head">
-             <div>
-                <h1>My Profile</h1>
-                <p>Manage your volunteer information.</p>
-            </div>
+  <nav class="navbar">
+    <div class="logo">Volunteer Profile</div>
+    <div class="nav-links"><a href="volunteer-dashboard.html">Dashboard</a><a href="#" onclick="logout(); return false;">Logout</a></div>
+  </nav>
+  <main class="container">
+    <h1>Edit Volunteer Profile</h1>
+    <div class="card">
+      <form id="editProfileForm" data-role="volunteer" class="profile-form" onsubmit="saveEditableProfile(event)">
+        
+        <label>First Name <input type="text" name="first_name" maxlength="100" required></label>
+        <label>Last Name <input type="text" name="last_name" maxlength="100" required></label>
+        <label>Phone <input type="tel" name="phone" maxlength="50"></label>
+        <label>Location <input type="text" name="location" maxlength="255"></label>
+        <label>Availability <textarea name="availability_summary" rows="3" maxlength="1000"></textarea></label>
+        <div class="profile-actions">
+          <button class="btn" type="submit">Save Changes</button>
+          <a class="btn" href="volunteer-dashboard.html">Cancel</a>
         </div>
-        <div class="card profile">
-            <div class="avatar">V</div>
-            <form id="profileForm">
-            <div class="grid grid-2">
-                <div class="field">
-                    <label>Full Name</label>
-                    <input value="Volunteer User">
-                </div>
-                <div class="field">
-                    <label>Email</label>
-                    <input value="volunteer@example.com" type="email">
-                </div>
-                <div class="field">
-                    <label>Phone</label>
-                    <input value="071 000 0000">
-                </div>
-                <div class="field">
-                    <label>Location</label>
-                    <input value="Vryheid">
-                </div>
-                <div class="field full">
-                    <label>Skills / Interests</label>
-                    <textarea>Community work, environment, education</textarea>
-                </div>
-            </div>
-            <div class="actions">
-                <button class="btn" type="submit">Save Changes</button>
-            </div>
-        </form>
+      </form>
+      <p id="profileMessage" role="status" aria-live="polite"></p>
     </div>
-</div>
-</main>
-</div>
-<script src="app.js"></script>
+  </main>
+  <script src="app.js"></script>
 </body>
 </html>
