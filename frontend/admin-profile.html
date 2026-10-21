@@ -1,73 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>
-Organisation Profile
-</title>
-
-<link
-    rel="stylesheet"
-    href="style.css"
->
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Organisation Profile</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .profile-form { display: grid; gap: 16px; max-width: 620px; }
+    .profile-form label { display: grid; gap: 6px; font-weight: 600; }
+    .profile-form input, .profile-form textarea { width: 100%; box-sizing: border-box; padding: 11px; font: inherit; border: 1px solid #9ca3af; border-radius: 6px; }
+    .profile-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    #profileMessage { min-height: 1.5em; }
+  </style>
 </head>
-
 <body>
-
-<nav class="navbar">
-
-    <div class="logo">
-        Organisation Profile
-    </div>
-
-    <div class="nav-links">
-
-        <a href="admin-dashboard.html">
-            Dashboard
-        </a>
-
-    </div>
-
-</nav>
-
-
-<div class="container">
-
+  <nav class="navbar">
+    <div class="logo">Organisation Profile</div>
+    <div class="nav-links"><a href="admin-dashboard.html">Dashboard</a><a href="#" onclick="logout(); return false;">Logout</a></div>
+  </nav>
+  <main class="container">
+    <h1>Edit Organisation Profile</h1>
     <div class="card">
-
-        <h1>
-            Organisation Profile
-        </h1>
-
-        <p>
-            Organisation information
-            associated with the current
-            administrator account.
-        </p>
-
-        <div id="organisationProfile">
-
-            Profile information is
-            managed through the
-            PostgreSQL organisation table.
-
+      <form id="editProfileForm" data-role="organisation_admin" class="profile-form" onsubmit="saveEditableProfile(event)">
+        
+        <label>Organisation Name <input type="text" name="name" maxlength="200" required></label>
+        <label>Phone <input type="tel" name="phone" maxlength="50"></label>
+        <label>Address <textarea name="address" rows="3" maxlength="500"></textarea></label>
+        <div class="profile-actions">
+          <button class="btn" type="submit">Save Changes</button>
+          <a class="btn" href="admin-dashboard.html">Cancel</a>
         </div>
-
+      </form>
+      <p id="profileMessage" role="status" aria-live="polite"></p>
     </div>
-
-</div>
-
-
-<script src="app.js"></script>
-
+  </main>
+  <script src="app.js"></script>
 </body>
 </html>
